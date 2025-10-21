@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rave Reviews</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/css/all.min.css">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .navbar-brand { color: #ff0000 !important; }
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+    }
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+    }
+    .btn-explore {
+      background-color: #ff0000;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 1rem;
+      color: white;
+      font-size: 1.125rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .btn-explore:hover { background-color: #cc0000; }
+
+    .container { max-width: 1100px; margin-inline: auto; padding: clamp(16px, 2.5vw, 28px); }
+
+    /* Scrolling Card Styles */
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 40px;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #c00 #222;
+    }
+
+    .scroll-container::-webkit-scrollbar { height: 2px; }
+    .scroll-container::-webkit-scrollbar-track { background-color: #000000; color: black; }
+    .scroll-container::-webkit-scrollbar-thumb { background: #c00; border-radius: 10px; }
+
+    .card-scroll {
+      position: relative;
+      min-width: 300px;
+      height: 300px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-scroll:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5);
+    }
+
+    .vision .blog{
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5);
+    }
+
+    .card-scroll img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .text-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.5);
+      color: red;
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 12px;
+    }
+
+    a.card-scroll { text-decoration: none; }
+
+    /* Jesse Brainwave Journey Flex */
+    #journey {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    #journey div {
+      flex: 1 1 45%;
+    }
+
+    #journey .portrait-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #journey .portrait {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    }
+
+    #journey h2 {
+      color: #ff0000;
+      margin-bottom: 1rem;
+    }
+        /* ********** VISION SECTION TRANSITION CSS ********** */
+    /* Base state: hidden */
+    .vision {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      /* Ensures the section is visible for selection, but hidden */
+    }
+
+    /* Target state: visible */
+    .vision.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* --- Hall of Fame Specific Styles --- */
+.hall-of-fame-section {
+    color: white; /* Ensure text remains visible */
+}
+
+#hallOfFameContainer {
+    height: 350px; /* Max height for the container to align cards at the bottom */
+    gap: 20px;
+}
+
+.hof-card {
+    background-color: white;
+    color: black;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    width: 150px; /* Fixed width for better visual comparison */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: bold;
+}
+
+.hof-card.rank-1 {
+    height: 300px; /* Tallest card */
+    border: 3px solid gold;
+    order: 2; /* Position 1st place in the center */
+}
+
+.hof-card.rank-2 {
+    height: 250px; /* Shorter than 1st */
+    border: 3px solid silver;
+    order: 1; /* Position 2nd place to the left */
+}
+
+.hof-card.rank-3 {
+    height: 200px; /* Shorter than 2nd */
+    border: 3px solid #cd7f32; /* Bronze color */
+    order: 3; /* Position 3rd place to the right */
+}
+
+.hof-amount {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.rank-1 .hof-name {
+    color: gold;
+    text-shadow: 1px 1px 2px #555;
+    font-size: 1.25rem;
+}
+.rank-2 .hof-amount { color: silver; }
+.rank-3 .hof-amount { color: #cd7f32; }
+
+/* Table for 4th and below */
+#remainingDonorsTable {
+    max-height: 180px; /* Shorter than 3rd place card (200px) */
+    overflow-y: auto;
+    display: block; /* Required for max-height and overflow to work on a table */
+    border: 1px solid #ff0000;
+}
+#remainingDonorsTable thead, #remainingDonorsTable tbody, #remainingDonorsTable tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures columns are aligned */
+}
+#remainingDonorsTable thead {
+    width: calc(100% - 1em); /* Adjust for scrollbar width */
+}
+/* CSS for Floating Particles */
+.particle {
+  position: fixed;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  background: red;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: float 10s linear infinite;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+/* --- Table for 4th and below (Styling for "fun" and no lines) --- */
+#remainingDonorsTable {
+    max-height: 250px; /* Made longer than 180px */
+    overflow-y: auto;
+    display: block;
+    border: none; /* Removed the main border */
+    background-color: #111; /* Darker background for contrast */
+}
+
+/* Remove default Bootstrap table lines (borders) */
+#remainingDonorsTable thead th,
+#remainingDonorsTable tbody td,
+#remainingDonorsTable tbody th {
+    border-top: none;
+    border-bottom: 1px solid rgba(255, 0, 0, 0.4); /* Subtly styled separator */
+    padding: 10px 15px; /* More padding for a spaced-out look */
+}
+
+/* Ensure header has a bottom line */
+#remainingDonorsTable thead {
+    border-bottom: 2px solid #ff0000;
+}
+
+#remainingDonorsTable thead, #remainingDonorsTable tbody, #remainingDonorsTable tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+#remainingDonorsTable thead {
+    width: calc(100% - 1em); /* Adjust for scrollbar width */
+    background-color: #330000; /* Dark red header background */
+    color: white;
+}
+
+/* Hover effect for fun interaction */
+#remainingDonorsTable tbody tr:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Slim, Red Scrollbar Styling (Webkit Browsers like Chrome, Safari) */
+#remainingDonorsTable::-webkit-scrollbar {
+    width: 6px; /* Slimmer width for vertical scrollbar */
+}
+#remainingDonorsTable::-webkit-scrollbar-track {
+    background: #000000;
+}
+#remainingDonorsTable::-webkit-scrollbar-thumb {
+    background-color: #ff0000; /* Red thumb */
+    border-radius: 10px;
+    border: 1px solid #c00;
+}
+/* End of scrollbar styling */
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expanded navbar-light bg-dark border-danger text-danger">
+    <div class="container-fluid">
+      <a href="" class="navbar-brand">Rave Reviews</a>
+      <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto d-flex flex-row flex-wrap justify-content-between">
+          <li class="nav-item"><a class="nav-link text-danger" href="./index.html"><i class="fa-solid fa-home"></i> HOME</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-danger fa-solid fa-gamepad" href="#" role="button" data-bs-toggle="dropdown"> GAME REVIEW</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item text-danger" href="./pages/steam.html">Steam Engine</a></li>
+              <li><a class="dropdown-item text-danger" href="./pages/fps.html">FPS</a></li>
+              <li><a class="dropdown-item text-danger" href="./pages/co-op.html">Co-op</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link text-danger" href="./pages/anime.html"><i class="fa-solid fa-play"></i> ANIME REVIEW</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="./pages/manga.html"><i class="fa-solid fa-book-open"></i> MANGA REVIEW</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-danger fa-solid fa-laptop" href="#" role="button" data-bs-toggle="dropdown"> TECH REVIEW</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item text-danger" href="./pages/accessories.html">Accessories</a></li>
+              <li><a class="dropdown-item text-danger" href="./pages/phones.html">Phones</a></li>
+              <li><a class="dropdown-item text-danger" href="./pages/pc.html">PC</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="./assets/img/main-character-cover-2.jpg">
+    <div class="hero-content">
+      <h2 style="font-size: 4rem; color: #ff0000; font-weight: 8; text-shadow: 2px 2px 5px black;">Rave Reviews</h2>
+      <p style="max-width: 600px; margin: 1rem auto;">Dive into expert reviews of Games, Anime, Manga, and Tech — all in one powerful hub built for enthusiasts.</p>
+      <button class="btn-explore"><a href="#link" class="text-light" style="text-decoration: none;">Explore Now</a></button>
+    </div>
+  </section>
+    <!-- Journey Section -->
+  <section id="journey" class="container">
+    <div>
+      <h2>My Humble Origins</h2>
+      <p>Brainwave’s professional journey began not in a traditional studio, but through a unique fusion of visual and auditory artistry. His formative years were dedicated to the meticulous discipline of manga sketching, an art form that trained his eye for narrative structure and his hand for detail. This visual storytelling background provided the framework for his musical compositions, each track meticulously layered to build a cohesive, compelling story.</p>
+    </div>
+    <div class="portrait-container">
+      <img class="portrait" src="./img/artist-photo.jpg" loading="lazy" alt="Stylized portrait of Jesse Brainwave looking stage-ready under neon lights." />
+    </div>
+  </section>
+
+  <hr>
+  <br>
+
+    <!-- Vision -->
+    <section id="vision" class="container vision bg-light text-dark" style="border-radius: 5px; box-shadow: 0 0 15px red; margin-left: 100px; margin-right: 200px;" >    <div>
+      <h2 class="d-flex flex-wrap align-items-center shadow-primary">Vision</h2>
+      <p>Brainwave’s professional journey began not in a traditional studio, but through a unique fusion of visual and auditory artistry. His formative years were dedicated to the meticulous discipline of manga sketching, an art form that trained his eye for narrative structure and his hand for detail. This visual storytelling background provided the framework for his musical compositions, each track meticulously layered to build a cohesive, compelling story.</p>
+    </div>
+  </section>
+
+  <!-- Scrollable Card Section -->
+  <section class="scroll-section container" id="link">
+    <h2 class="text-center my-4 text-danger">Content</h2>
+    <div class="scroll-container">
+      <a href="./pages/fps.html" class="card-scroll">
+        <img src="./assets/img/FPS shooter.jpg" alt="Card 1" />
+        <div class="text-overlay">FPS</div>
+      </a>
+      <a href="./pages/steam.html" class="card-scroll">
+        <img src="./assets/img/Steam Engine Games.jpg" alt="Card 2" />
+        <div class="text-overlay">Steam Engine</div>
+      </a>
+      <a href="./pages/coop.html" class="card-scroll">
+        <img src="./assets/img/Co-op Games.jpg" alt="Card 3" />
+        <div class="text-overlay">Co-op</div>
+      </a>
+      <a href="./pages/anime.html" class="card-scroll">
+        <img src="./assets/img/Anime.jpg" alt="Card 4" />
+        <div class="text-overlay">Anime</div>
+      </a>
+      <a href="./pages/manga.html" class="card-scroll">
+        <img src="./assets/img/Manga.jpg" alt="Card 5" />
+        <div class="text-overlay">Manga</div>
+      </a>
+      <a href="./pages/accessories.html" class="card-scroll">
+        <img src="./assets/img/Tech-Accessories.jpg" alt="Card 6" />
+        <div class="text-overlay">Accessories</div>
+      </a>
+      <a href="./pages/phones.html" class="card-scroll">
+        <img src="./assets/img/Phones.jpg" alt="Card 7" />
+        <div class="text-overlay">Phones</div>
+      </a>
+      <a href="./pages/pc.html" class="card-scroll">
+        <img src="./assets/img/PCs.jpg" alt="Card 8" />
+        <div class="text-overlay">PCs</div>
+      </a>
+    </div>
+  </section>
+
+   <section id="journey" class="container">
+    <div>
+      <h2> Blog </h2>
+      <p>Brainwave’s professional journey began not in a traditional studio, but through a unique fusion of visual and auditory artistry. His formative years were dedicated to the meticulous discipline of manga sketching, an art form that trained his eye for narrative structure and his hand for detail. This visual storytelling background provided the framework for his musical compositions, each track meticulously layered to build a cohesive, compelling story.</p>
+      <button class="btn-explore"><a href="./pages/blog.html" class="text-light" style="text-decoration: none;">Dive Deeper</a></button>
+    </div>
+<div class="portrait-container">
+  <video id="journeyVideo" class="portrait" src="" preload="metadata" controls></video>
+
+</div>
+  </section>
+
+  <section class="hall-of-fame-section container my-5">
+    <h2 class="text-center text-danger mb-4">🏆 Hall of Famers 🏅</h2>
+
+    <div id="hallOfFameContainer" class="d-flex justify-content-center align-items-end mb-4">
+        </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <table id="remainingDonorsTable" class="table table-dark table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Donation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 border-top border-danger text-gray-400 bg-light text-dark" style="color: #ccc;">
+    © 2025 Review. All Rights Reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+  // ********** Vision Section Scroll Animation **********
+  const visionSection = document.getElementById('vision');
+
+  const observerOptions = {
+    // Sets the threshold to 0.2, meaning the callback fires when 20% of the element is visible.
+    threshold: 0.2
+  };
+
+  const visionObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      // The entry.isIntersecting is true when the element's visibility ratio reaches the threshold (0.2)
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        // Removes the visible class when it scrolls out of the 20% range (up or down).
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, observerOptions);
+
+  // Start observing the target element
+  if (visionSection) {
+    visionObserver.observe(visionSection);
+  }
+// ***************************************************
+// ********** Hall of Fame Logic **********
+
+// Sample Data (replace with your actual data source)
+const donorData = [
+    { name: "Iron Man", amount: 100 },
+    { name: "Captain America", amount: 2000 }, // Should be Rank 1
+    { name: "Thor", amount: 1000 },
+    { name: "Black Widow", amount: 50 },
+    { name: "Hulk", amount: 9000 },
+    { name: "Hawkeye", amount: 5000 },
+    { name: "Loki", amount: 100 },
+    { name: "Thanos", amount: 100 },
+];
+
+function renderHallOfFame() {
+    // 1. Sort the data in descending order by amount
+    donorData.sort((a, b) => b.amount - a.amount);
+
+    const topThree = donorData.slice(0, 3);
+    const remainingDonors = donorData.slice(3);
+
+    const cardContainer = document.getElementById('hallOfFameContainer');
+    const tableBody = document.getElementById('remainingDonorsTable').getElementsByTagName('tbody')[0];
+    
+    // Clear previous content
+    cardContainer.innerHTML = '';
+    tableBody.innerHTML = '';
+
+    // 2. Render Top 3 Cards
+    topThree.forEach((donor, index) => {
+        const rank = index + 1;
+        const card = document.createElement('div');
+        card.classList.add('hof-card', `rank-${rank}`);
+        
+        // Use a different class for the name only for rank 1 (gold text)
+        const nameClass = rank === 1 ? 'hof-name' : '';
+        
+        card.innerHTML = `
+            <small>#${rank}</small>
+            <div class="${nameClass}">${donor.name}</div>
+            <div class="hof-amount">$${donor.amount.toLocaleString()}</div>
+        `;
+        cardContainer.appendChild(card);
+    });
+
+    // 3. Render Remaining Donors Table
+    remainingDonors.forEach((donor, index) => {
+        const rank = 4 + index;
+        const row = tableBody.insertRow();
+        
+        row.innerHTML = `
+            <th scope="row">${rank}</th>
+            <td>${donor.name}</td>
+            <td>$${donor.amount.toLocaleString()}</td>
+        `;
+    });
+}
+
+// Call the function to display the Hall of Fame when the page loads
+renderHallOfFame();
+// ***************************************************
+</script>
+
+<script>
+for (let i = 0; i < 20; i++) {
+  const particle = document.createElement('div');
+  particle.classList.add('particle');
+  particle.style.left = Math.random() * 100 + 'vw';
+  particle.style.animationDuration = (5 + Math.random() * 10) + 's';
+  particle.style.animationDelay = Math.random() * 5 + 's';
+  document.body.appendChild(particle);
+}
+</script>
+
+</body>
+</html>
