@@ -295,6 +295,55 @@
     border: 1px solid #c00;
 }
 /* End of scrollbar styling */
+/* **Styles for screens up to 768px wide** */
+@media (max-width: 768px) {
+  
+  /* **Navbar Responsiveness** */
+  .nav-links {
+    /* **Hide menu on mobile by default, then JavaScript will show it** */
+    display: none; 
+    flex-direction: column; /* Stack links vertically */
+    width: 100%;
+    position: absolute;
+    top: 60px; /* Below the navbar */
+    left: 0;
+    background-color: #333; /* Background for the dropdown menu */
+  }
+
+  /* **Style for when the menu is active/open** */
+  .nav-links.active {
+    display: flex; /* Show the menu */
+  }
+
+  .menu-toggle {
+    /* **Show the toggle button on mobile** */
+    display: block; 
+  }
+
+  /* **Hero Section Responsiveness** */
+  .hero {
+    flex-direction: column; /* **Stack content vertically (Content on top, Image below)** */
+    text-align: center;
+  }
+  
+  .hero-image {
+    order: -1; /* Place the image above the content (optional) */
+    margin-bottom: 20px;
+  }
+
+  .hero-image img {
+    max-width: 80%; /* Shrink the image on small screens */
+    height: auto;
+  }
+  /* **Replace the existing .vision style with this** */
+.vision {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  /* REMOVE: margin-left: 100px; margin-right: 200px; */
+}
+}
+
   </style>
 </head>
 <body>
@@ -355,7 +404,7 @@
   <br>
 
     <!-- Vision -->
-    <section id="vision" class="container vision bg-light text-dark" style="border-radius: 5px; box-shadow: 0 0 15px red; margin-left: 100px; margin-right: 200px;" >    <div>
+    <section id="vision" class="container vision bg-light text-dark mx-0" style="border-radius: 5px; box-shadow: 0 0 15px red; margin-left: 100px; margin-right: 200px;" >    <div>
       <h2 class="d-flex flex-wrap align-items-center shadow-primary">Vision</h2>
       <p>Brainwave’s professional journey began not in a traditional studio, but through a unique fusion of visual and auditory artistry. His formative years were dedicated to the meticulous discipline of manga sketching, an art form that trained his eye for narrative structure and his hand for detail. This visual storytelling background provided the framework for his musical compositions, each track meticulously layered to build a cohesive, compelling story.</p>
     </div>
@@ -540,6 +589,16 @@ for (let i = 0; i < 20; i++) {
   particle.style.animationDelay = Math.random() * 5 + 's';
   document.body.appendChild(particle);
 }
+// **Get the elements**
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+// **Add an event listener to the button**
+menuToggle.addEventListener('click', () => {
+  // **Toggle the 'active' class on the menu links**
+  // The CSS media query handles what happens when 'active' is present.
+  navLinks.classList.toggle('active');
+});
 </script>
 
 </body>
